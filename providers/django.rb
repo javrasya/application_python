@@ -26,10 +26,12 @@ action :before_compile do
 
   include_recipe 'python'
 
-  new_resource.migration_command "#{::File.join(new_resource.virtualenv, "bin", "python")} manage.py syncdb --noinput" if !new_resource.migration_command
+  new_resource.migration_command "#{::File.join(new_resource.virtualenv, "bin", "python")} #{new_resource.managepy} syncdb --noinput" if !new_resource.migration_command
+
+  d_settings = ::File.join(new_resource.subdirectory, new_resource.local_settings_file)
 
   new_resource.symlink_before_migrate.update({
-    new_resource.local_settings_base => new_resource.local_settings_file,
+    new_resource.local_settings_base => d_settings
   })
 end
 
@@ -37,7 +39,7 @@ action :before_deploy do
 
   install_packages
 
-  created_settings_file
+  #created_settings_file
 
 end
 
@@ -82,7 +84,7 @@ action :before_symlink do
 
   if new_resource.collectstatic
     cmd = new_resource.collectstatic.is_a?(String) ? new_resource.collectstatic : "collectstatic --noinput"
-    execute "#{::File.join(new_resource.virtualenv, "bin", "python")} manage.py #{cmd}" do
+    execute "cd #{new_resource.subdirectory}&&#{::File.join(new_resource.virtualenv, "bin", "python")} #{new_resource.managepy} #{cmd}" do
       user new_resource.owner
       group new_resource.group
       cwd new_resource.release_path
@@ -110,6 +112,7 @@ protected
 
 def install_packages
   python_virtualenv new_resource.virtualenv do
+    interpreter new_resource.interpreter
     path new_resource.virtualenv
     owner new_resource.owner
     group new_resource.group

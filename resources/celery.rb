@@ -30,7 +30,7 @@ attribute :camera_class, :kind_of => [String, NilClass], :default => nil
 attribute :enable_events, :kind_of => [TrueClass, FalseClass], :default => false
 attribute :environment, :kind_of => [Hash], :default => {}
 attribute :queues, :kind_of => [Array,NilClass], :default => nil
-
+attribute :restart_services, :kind_of => [TrueClass, FalseClass], :default => true
 def config_base
   config.split(/[\\\/]/).last
 end

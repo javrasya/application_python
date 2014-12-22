@@ -35,31 +35,28 @@ action :before_compile do
     end
   end
 
+  c_config = ::File.join(new_resource.subdirectory, new_resource.config)
+
   new_resource.symlink_before_migrate.update({
-    new_resource.config_base => new_resource.config,
+    new_resource.config_base => c_config,
   })
 
   new_resource.broker[:transport] ||= "amqplib"
   new_resource.broker[:host_role] ||= "#{new_resource.application.name}_task_broker"
-  new_resource.broker[:host] ||= begin
-    host = new_resource.find_matching_role(new_resource.broker[:host_role])
-    raise "No task broker host found" unless host
-    host.attribute?('cloud') ? host['cloud']['local_ipv4'] : host['ipaddress']
-  end
 end
 
 action :before_deploy do
 
   new_resource = @new_resource
 
-  template ::File.join(new_resource.application.path, "shared", new_resource.config_base) do
-    source new_resource.template || "celeryconfig.py.erb"
-    cookbook new_resource.template ? new_resource.cookbook_name.to_s : "application_python"
-    owner new_resource.owner
-    group new_resource.group
-    mode "644"
-    variables :broker => new_resource.broker, :results => new_resource.results
-  end
+#  template ::File.join(new_resource.application.path, "shared", new_resource.config_base) do
+#    source new_resource.template || "celeryconfig.py.erb"
+#    cookbook new_resource.template ? new_resource.cookbook_name.to_s : "application_python"
+#    owner new_resource.owner
+#    group new_resource.group
+#    mode "644"
+#    variables :broker => new_resource.broker, :results => new_resource.results
+#  end
 
   if new_resource.celerycam
     # turn on events automatically, if we are going to run celerycam
@@ -85,10 +82,10 @@ action :before_deploy do
     end
     cmds[:celerycam] = cmd
   end
-
   cmds.each do |type, cmd|
     supervisor_service "#{new_resource.application.name}-#{type}" do
-      action :enable
+      actions = [:enable]
+      action actions
       if new_resource.django
         django_resource = new_resource.application.sub_resources.select{|res| res.type == :django}.first
         raise "No Django deployment resource found" unless django_resource
@@ -97,13 +94,13 @@ action :before_deploy do
       else
         command cmd
         if new_resource.environment
-          environment new_resource.environment.merge({'CELERY_CONFIG_MODULE' => new_resource.config})
+          environment new_resource.environment.merge({'CELERY_CONFIG_MODULE' => c_config})
         else
-          environment 'CELERY_CONFIG_MODULE' => new_resource.config
+          environment 'CELERY_CONFIG_MODULE' => c_config
         end
       end
-      directory ::File.join(new_resource.path, "current")
-      autostart false
+      directory ::File.join(new_resource.path, "current", new_resource.subdirectory)
+      autostart true
       user new_resource.owner
     end
   end
