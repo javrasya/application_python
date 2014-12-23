@@ -30,9 +30,9 @@ action :before_compile do
 
   d_settings = ::File.join(new_resource.subdirectory, new_resource.local_settings_file)
 
-#  new_resource.symlink_before_migrate.update({
-#    new_resource.local_settings_base => d_settings
-#  })
+  new_resource.symlink_before_migrate.update({
+    d_settings => "settings"
+  })
 end
 
 action :before_deploy do
@@ -87,7 +87,7 @@ action :before_symlink do
     execute "cd #{new_resource.subdirectory}&&#{::File.join(new_resource.virtualenv, "bin", "python")} #{new_resource.managepy} #{cmd}" do
       user new_resource.owner
       group new_resource.group
-      cwd new_resource.release_path
+      cwd ::File.join(new_resource.release_path, new_resource.subdirectory)
     end
   end
 
