@@ -30,9 +30,9 @@ action :before_compile do
 
   d_settings = ::File.join(new_resource.subdirectory, new_resource.local_settings_file)
 
-  setting_file = "application_setting.py"
+  setting_file = "#{new_resource.name}_setting"
   new_resource.symlink_before_migrate.update({
-    d_settings => setting_file
+    d_settings => "#{setting_file}.py"
   })
   new_resource.environment.update({"DJANGO_SETTINGS_MODULE"=>setting_file})
 
