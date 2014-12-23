@@ -133,20 +133,3 @@ def install_packages
   end
 end
 
-def created_settings_file
-  host = new_resource.find_database_server(new_resource.database_master_role)
-
-  template "#{new_resource.path}/shared/#{new_resource.local_settings_base}" do
-    source new_resource.settings_template || "settings.py.erb"
-    cookbook new_resource.settings_template ? new_resource.cookbook_name.to_s : "application_python"
-    owner new_resource.owner
-    group new_resource.group
-    mode "644"
-    variables new_resource.settings.clone
-    variables.update :django => new_resource, :debug => new_resource.debug, :database => {
-      :host => host,
-      :settings => new_resource.database,
-      :legacy => new_resource.legacy_database_settings
-    }
-  end
-end
