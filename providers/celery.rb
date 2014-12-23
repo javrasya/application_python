@@ -37,9 +37,9 @@ action :before_compile do
 
   c_config = ::File.join(new_resource.subdirectory, new_resource.config)
 
-  new_resource.symlink_before_migrate.update({
-    new_resource.config_base => c_config,
-  })
+#  new_resource.symlink_before_migrate.update({
+#    new_resource.config_base => c_config,
+#  })
 
   new_resource.broker[:transport] ||= "amqplib"
   new_resource.broker[:host_role] ||= "#{new_resource.application.name}_task_broker"
