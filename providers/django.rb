@@ -24,6 +24,8 @@ include Chef::DSL::IncludeRecipe
 
 action :before_compile do
 
+  raise "You must specify an setting_file" unless new_resource.setting_file
+
   include_recipe 'python'
 
   new_resource.migration_command "#{::File.join(new_resource.virtualenv, "bin", "python")} #{new_resource.managepy} syncdb --noinput" if !new_resource.migration_command
@@ -31,7 +33,7 @@ action :before_compile do
 
   setting_file="#{new_resource.name}"
   new_resource.symlink_before_migrate.update({
-    ::File.join(new_resource.subdirectory,new_resource.local_settings_file) => "#{setting_file}.py",
+    ::File.join(new_resource.subdirectory,new_resource.setting_file) => "#{setting_file}.py",
   })
 
   new_resource.environment.update({
