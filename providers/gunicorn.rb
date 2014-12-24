@@ -24,7 +24,7 @@ include Chef::DSL::IncludeRecipe
 
 action :before_compile do
 
-  c_environment=new_resource.environment.clone()
+  c_environment=new_resource.environment.clone
   c_environment.update(new_resource.application.environment)
   new_resource.environment= c_environment
 
