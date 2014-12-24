@@ -26,6 +26,8 @@ action :before_compile do
 
   raise "You must specify an application module to load" if new_resource.config.nil? and !new_resource.django
 
+  new_resource.environment.update(new_resource.application.environment)
+
   if !new_resource.restart_command
     r = new_resource
     new_resource.restart_command do

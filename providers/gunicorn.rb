@@ -24,6 +24,8 @@ include Chef::DSL::IncludeRecipe
 
 action :before_compile do
 
+  new_resource.environment.update(new_resource.application.environment)
+
   include_recipe "supervisor"
 
   install_packages

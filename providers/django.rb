@@ -28,6 +28,8 @@ action :before_compile do
 
   include_recipe 'python'
 
+  new_resource.environment.update(new_resource.application.environment)
+
   new_resource.migration_command "#{::File.join(new_resource.virtualenv, "bin", "python")} #{new_resource.managepy} syncdb --noinput" if !new_resource.migration_command
 
 
