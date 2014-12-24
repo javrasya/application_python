@@ -24,7 +24,7 @@ action :before_compile do
 
   include_recipe "supervisor"
 
-  raise "You must specify an application module to load" unless new_resource.config
+  raise "You must specify an application module to load" unless new_resource.config and !new_resource.django
 
   if !new_resource.restart_command
     r = new_resource
@@ -35,7 +35,6 @@ action :before_compile do
     end
   end
 
-  c_config = ::File.join(new_resource.subdirectory, new_resource.config)
 
 #  new_resource.symlink_before_migrate.update({
 #    new_resource.config_base => c_config,
@@ -92,6 +91,7 @@ action :before_deploy do
         command "#{::File.join(django_resource.virtualenv, "bin", "python")} manage.py #{cmd}"
         environment new_resource.environment
       else
+        c_config = ::File.join(new_resource.subdirectory, new_resource.config)
         command cmd
         if new_resource.environment
           environment new_resource.environment.merge({'CELERY_CONFIG_MODULE' => c_config})
