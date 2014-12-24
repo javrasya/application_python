@@ -24,6 +24,7 @@ include Chef::DSL::IncludeRecipe
 
 action :before_compile do
 
+  raise "You must specify a setting_file" unless new_resource.settings_file
 
   include_recipe 'python'
 
@@ -32,11 +33,11 @@ action :before_compile do
 
   setting_file="#{new_resource.name}_settings"
   new_resource.symlink_before_migrate.update({
-    ::File.join(new_resource.subdirectory,new_resource.setting_file) => "#{setting_file}.py",
+    ::File.join(new_resource.subdirectory,new_resource.settings_file) => "#{setting_file}.py",
   })
 
   new_resource.environment.update({
-    "DJANGO_SETTINGS_MODULE" => setting_file
+    "DJANGO_SETTINGS_MODULE" => settings_file
     })
 
 end
