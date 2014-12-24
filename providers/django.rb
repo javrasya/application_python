@@ -24,17 +24,17 @@ include Chef::DSL::IncludeRecipe
 
 action :before_compile do
 
-  raise "You must specify a setting_file" unless new_resource.settings_file
+  #raise "You must specify a setting_file" unless new_resource.settings_file
 
   include_recipe 'python'
 
   new_resource.migration_command "#{::File.join(new_resource.virtualenv, "bin", "python")} #{new_resource.managepy} syncdb --noinput" if !new_resource.migration_command
 
 
-  linked_settings_file="#{new_resource.name}_settings"
-  new_resource.symlink_before_migrate.update({
-    ::File.join(new_resource.subdirectory,new_resource.settings_file) => "#{linked_settings_file}.py",
-  })
+  #linked_settings_file="#{new_resource.name}_settings"
+  #new_resource.symlink_before_migrate.update({
+  #  ::File.join(new_resource.subdirectory,new_resource.settings_file) => "#{linked_settings_file}.py",
+  #})
 
   #new_resource.environment.update({
   #  "DJANGO_SETTINGS_MODULE" => linked_settings_file
