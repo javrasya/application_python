@@ -28,7 +28,15 @@ action :before_compile do
 
   new_resource.migration_command "#{::File.join(new_resource.virtualenv, "bin", "python")} #{new_resource.managepy} syncdb --noinput" if !new_resource.migration_command
 
-  new_resource.release_path += "#{new_resource.release_path}/#{new_resource.subdirectory}"
+
+  setting_file="#{new_resource.name}"
+  new_resource.symlink_before_migrate.update({
+    ::File.join(new_resource.subdirectory,new_resource.local_settings_file) => "#{setting_file}.py",
+  })
+
+  new_resource.environment.update({
+    "DJANGO_SETTINGS_MODULE" => setting_file
+    })
 
 end
 
