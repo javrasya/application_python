@@ -24,7 +24,6 @@ include Chef::DSL::IncludeRecipe
 
 action :before_compile do
 
-  raise "You must specify a setting_file" unless new_resource.setting_file?
 
   include_recipe 'python'
 
