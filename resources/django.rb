@@ -32,7 +32,7 @@ attribute :debug, :kind_of => [TrueClass, FalseClass], :default => false
 attribute :collectstatic, :kind_of => [TrueClass, FalseClass, String], :default => false
 attribute :managepy, :kind_of => [String, NilClass], :default => 'manage.py'
 attribute :interpreter, :kind_of => [String, NilClass], :default => 'python'
-attribute :settings_file, :kind_of => String, :default => nil
+attribute :settings_file, :kind_of => [String, NilClass], :default => nil
 
 def local_settings_base
   local_settings_file.split(/[\\\/]/).last
