@@ -48,7 +48,7 @@ action :before_deploy do
 
   new_resource = @new_resource
 
-  gunicorn_config "#{new_resource.application.path}/shared/gunicorn_config.py" do
+  gunicorn_config "#{new_resource.application.path}/shared/" do
     action :create
     template new_resource.settings_template || 'gunicorn.py.erb'
     cookbook new_resource.settings_template ? new_resource.cookbook_name.to_s : 'gunicorn'
@@ -90,7 +90,7 @@ action :before_deploy do
       base_command = "#{gunicorn_command} #{new_resource.app_module}"
     end
     command "#{base_command} -c #{new_resource.application.path}/shared/gunicorn_config.py"
-    directory new_resource.directory.nil? ? ::File.join(new_resource.path, "current") : new_resource.directory
+    directory new_resource.directory.nil? ? ::File.join(new_resource.path, "current", new_resource.sub_directory) : new_resource.directory
     autostart new_resource.autostart
     user new_resource.owner
   end
