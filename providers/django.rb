@@ -26,7 +26,6 @@ action :before_compile do
 
   #raise "You must specify a setting_file" unless new_resource.settings_file
 
-  include_recipe 'python'
 
   new_resource.migration_command "#{::File.join(new_resource.virtualenv, "bin", "python")} #{new_resource.managepy} syncdb --noinput" if !new_resource.migration_command
 
