@@ -24,7 +24,9 @@ include Chef::DSL::IncludeRecipe
 
 action :before_compile do
 
-  new_resource.environment.update(new_resource.application.environment)
+  c_environment=new_resource.environment.clone()
+  c_environment.update(new_resource.application.environment)
+  new_resource.environment= c_environment
 
   include_recipe "supervisor"
 
