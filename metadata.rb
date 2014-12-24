@@ -11,5 +11,3 @@ version          "3.0.1"
 end
 
 depends "application"
-
-include_recipe 'python'
