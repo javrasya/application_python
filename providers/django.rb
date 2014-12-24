@@ -36,9 +36,9 @@ action :before_compile do
     ::File.join(new_resource.subdirectory,new_resource.settings_file) => "#{linked_settings_file}.py",
   })
 
-  new_resource.environment.update({
-    "DJANGO_SETTINGS_MODULE" => linked_settings_file
-    })
+  #new_resource.environment.update({
+  #  "DJANGO_SETTINGS_MODULE" => linked_settings_file
+  #  })
 
 end
 
