@@ -24,7 +24,7 @@ action :before_compile do
 
   include_recipe "supervisor"
 
-  raise "You must specify an application module to load" if new_resource.config.nill? and !new_resource.django
+  raise "You must specify an application module to load" if new_resource.config.nil? and !new_resource.django
 
   if !new_resource.restart_command
     r = new_resource
