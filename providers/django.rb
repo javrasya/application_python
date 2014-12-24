@@ -31,13 +31,13 @@ action :before_compile do
   new_resource.migration_command "#{::File.join(new_resource.virtualenv, "bin", "python")} #{new_resource.managepy} syncdb --noinput" if !new_resource.migration_command
 
 
-  setting_file="#{new_resource.name}_settings"
+  linked_settings_file="#{new_resource.name}_settings"
   new_resource.symlink_before_migrate.update({
-    ::File.join(new_resource.subdirectory,new_resource.settings_file) => "#{setting_file}.py",
+    ::File.join(new_resource.subdirectory,new_resource.settings_file) => "#{linked_settings_file}.py",
   })
 
   new_resource.environment.update({
-    "DJANGO_SETTINGS_MODULE" => settings_file
+    "DJANGO_SETTINGS_MODULE" => linked_settings_file
     })
 
 end
