@@ -57,6 +57,8 @@ action :before_deploy do
     else
       listen_uri = "#{new_resource.host}:#{new_resource.port}"
     end
+    owner new_resource.application.owner
+    group new_resource.application.group
     listen listen_uri
     backlog new_resource.backlog
     worker_processes new_resource.workers
