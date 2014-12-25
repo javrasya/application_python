@@ -28,13 +28,8 @@ action :before_compile do
 
   install_packages
 
-  django_resource = new_resource.application.sub_resources.select{|res| res.type == :django}.first
-  gunicorn_install "gunicorn-#{new_resource.application.name}" do
-    interpreter django_resource ? django_resource.interpreter : 'python'
-    owner django_resource ? new_resource.application.owner : nil
-    group django_resource ? new_resource.application.group : nil
-    virtualenv django_resource ? django_resource.virtualenv : new_resource.virtualenv
-  end
+  
+
 
   if !new_resource.restart_command
     r = new_resource
@@ -50,6 +45,14 @@ end
 action :before_deploy do
 
   new_resource = @new_resource
+
+  django_resource = new_resource.application.sub_resources.select{|res| res.type == :django}.first
+  gunicorn_install "gunicorn-#{new_resource.application.name}" do
+    interpreter django_resource ? django_resource.interpreter : 'python'
+    owner django_resource ? new_resource.application.owner : nil
+    group django_resource ? new_resource.application.group : nil
+    virtualenv django_resource ? django_resource.virtualenv : new_resource.virtualenv
+  end
 
   gunicorn_config "#{new_resource.application.path}/shared/gunicorn_config.py" do
     action :create
