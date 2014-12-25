@@ -149,7 +149,7 @@ def install_requirements
     if new_resource.virtualenv.nil?
       pip_cmd = 'pip'
     else
-      pip_cmd = ::File.join(new_resource.virtualenv, 'bin', 'pip')
+      pip_cmd = ::File.join(new_resource.virtualenv, 'bcoin', 'pip')
     end
     execute "#{pip_cmd} install --src=#{Dir.tmpdir} -r #{new_resource.requirements}" do
       cwd new_resource.release_path
