@@ -26,7 +26,7 @@ action :before_compile do
 
   include_recipe "supervisor"
 
-  install_packages
+  #install_packages
 
   django_resource = new_resource.application.sub_resources.select{|res| res.type == :django}.first
   gunicorn_install "gunicorn-#{new_resource.application.name}" do
