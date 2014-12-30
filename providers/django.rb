@@ -67,7 +67,11 @@ action :before_migrate do
   if new_resource.requirements
     Chef::Log.info("Installing using requirements file: #{new_resource.requirements}")
     pip_cmd = ::File.join(new_resource.virtualenv, 'bin', 'pip')
-    execute "#{pip_cmd} install --source=#{Dir.tmpdir} -r #{new_resource.requirements}" do
+    upgrade = ''
+    if new_resource.pip_upgrade
+      upgrade= '--upgrade'
+    end
+    execute "#{pip_cmd} install --source=#{Dir.tmpdir} -r #{new_resource.requirements} #{upgrade}" do
       cwd new_resource.release_path
       # seems that if we don't set the HOME env var pip tries to log to /root/.pip, which fails due to permissions
       # setting HOME also enables us to control pip behavior on per-project basis by dropping off a pip.conf file there

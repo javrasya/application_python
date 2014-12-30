@@ -33,6 +33,7 @@ attribute :collectstatic, :kind_of => [TrueClass, FalseClass, String], :default 
 attribute :managepy, :kind_of => [String, NilClass], :default => 'manage.py'
 attribute :interpreter, :kind_of => [String, NilClass], :default => 'python'
 attribute :settings_file, :kind_of => [String, NilClass], :default => nil
+attribute :pip_upgrade, :kind_of => [TrueClass, FalseClass], :default => false
 
 def local_settings_base
   local_settings_file.split(/[\\\/]/).last
