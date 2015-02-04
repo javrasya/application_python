@@ -54,7 +54,7 @@ action :before_deploy do
     virtualenv django_resource ? django_resource.virtualenv : new_resource.virtualenv
   end
 
-  gunicorn_config "#{new_resource.application.path}/shared/gunicorn_config.py" do
+  gunicorn_config "#{new_resource.application.path}/shared/#{new_resource.gunicorn_config}.py" do
     action :create
     template new_resource.settings_template || 'gunicorn.py.erb'
     cookbook new_resource.settings_template ? new_resource.cookbook_name.to_s : 'gunicorn'
