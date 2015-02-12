@@ -31,6 +31,8 @@ attribute :enable_events, :kind_of => [TrueClass, FalseClass], :default => false
 attribute :environment, :kind_of => [Hash], :default => {}
 attribute :queues, :kind_of => [Array,NilClass], :default => nil
 attribute :restart_services, :kind_of => [TrueClass, FalseClass], :default => true
+attribute :concentrate_logs, :kind_of => [TrueClass, FalseClass], :default => false
+
 def config_base
   config.split(/[\\\/]/).last
 end

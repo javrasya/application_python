@@ -89,6 +89,7 @@ action :before_deploy do
         django_resource = new_resource.application.sub_resources.select{|res| res.type == :django}.first
         raise "No Django deployment resource found" unless django_resource
         command "#{::File.join(django_resource.virtualenv, "bin", "python")} manage.py #{cmd}"
+        redirect_stderr new_resource.concentrate_logs
         environment new_resource.environment
       else
         c_config = ::File.join(new_resource.subdirectory, new_resource.config)
