@@ -97,7 +97,7 @@ action :before_deploy do
       gunicorn_command = django_resource.virtualenv.nil? ? "gunicorn" : "#{::File.join(django_resource.virtualenv, "bin", "gunicorn")}"
       base_command = "#{gunicorn_command} #{new_resource.app_module}"
     end
-    command "#{base_command} -c #{new_resource.application.path}/shared/gunicorn_config.py"
+    command "#{base_command} -c #{new_resource.application.path}/shared/#{new_resource.config}.py"
     redirect_stderr new_resource.concentrate_logs
     directory new_resource.directory.nil? ? ::File.join(new_resource.path, "current", new_resource.subdirectory) : new_resource.directory
     autostart new_resource.autostart
