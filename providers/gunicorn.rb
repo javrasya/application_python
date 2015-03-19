@@ -30,11 +30,11 @@ action :before_compile do
 
   
 
-
+  service_name = new_resource.name ? new_resource.name : application.name
   if !new_resource.restart_command
     r = new_resource
     new_resource.restart_command do
-      run_context.resource_collection.find(:supervisor_service => r.application.name).run_action(:restart)
+      run_context.resource_collection.find(:supervisor_service => service_name).run_action(:restart)
     end
   end
 
@@ -83,8 +83,8 @@ action :before_deploy do
     #loglevel
     #proc_name
   end
-
-  supervisor_service new_resource.application.name do
+  service_name = new_resource.name ? new_resource.name : application.name
+  supervisor_service service_name do
     action :enable
     if new_resource.environment
       environment new_resource.environment

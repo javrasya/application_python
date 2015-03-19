@@ -50,4 +50,5 @@ attribute :autostart, :kind_of => [TrueClass, FalseClass], :default => false
 attribute :directory, :kind_of => [NilClass, String], :default => nil
 attribute :config, :kind_of => String, :default => 'gunicorn_config'
 attribute :concentrate_logs, :kind_of => [TrueClass, FalseClass], :default => false
+attribute :name, :kind_of => [String, NilClass], :default => nil
 
